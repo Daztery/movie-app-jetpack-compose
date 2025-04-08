@@ -1,8 +1,8 @@
 package com.daztery.movieapp.presentation.navigation
 
 object Routes {
-  val HomeScreen = "home"
-  val DetailScreen = "detail"
-  val FavoriteScreen = "favs"
-  val NowPlayingScreen = "nowplaying"
+  const val HomeScreen = "home"
+  const val DetailScreen = "detail"
+  const val FavoriteScreen = "favs"
+  const val NowPlayingScreen = "nowplaying"
 }

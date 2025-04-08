@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MovieApp</string>
+
+    <!--Error messages enum-->
+    <string name="internet_connection_error_message">Ocurrió un error, verifica tu conexión a internet</string>
+    <string name="database_connection_error_message">Ocurrió un error inesperado en la base de datos</string>
+    <string name="default_error_message_text">Ocurrió un error desconocido</string>
 </resources>
