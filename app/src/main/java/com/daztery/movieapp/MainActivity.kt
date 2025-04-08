@@ -16,8 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.daztery.movieapp.presentation.detail.DetailScreen
+import com.daztery.movieapp.presentation.favorites.FavoriteScreen
 import com.daztery.movieapp.presentation.home.HomeScreen
+import com.daztery.movieapp.presentation.navigation.MainBottomNavigationBar
 import com.daztery.movieapp.presentation.navigation.Routes
+import com.daztery.movieapp.presentation.nowplaying.NowPlayingScreen
 import com.daztery.movieapp.ui.theme.MovieAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,19 +33,28 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = backStackEntry?.destination
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          NavHost(navController = navController, startDestination = Routes.HomeScreen, modifier = Modifier.padding(innerPadding)) {
-            composable(Routes.HomeScreen){
+        Scaffold(
+          modifier = Modifier.fillMaxSize(),
+          bottomBar = {
+            MainBottomNavigationBar(navController, currentDestination)
+          }
+        ) { innerPadding ->
+          NavHost(
+            navController = navController,
+            startDestination = Routes.HomeScreen,
+            modifier = Modifier.padding(innerPadding)
+          ) {
+            composable(Routes.HomeScreen) {
               HomeScreen()
             }
-            composable(Routes.DetailScreen){
-              Text("Detail")
+            composable(Routes.DetailScreen) {
+              DetailScreen()
             }
-            composable(Routes.FavoriteScreen){
-              Text("Favorite")
+            composable(Routes.FavoriteScreen) {
+              FavoriteScreen()
             }
-            composable(Routes.NowPlayingScreen){
-              Text("NwoPlaying")
+            composable(Routes.NowPlayingScreen) {
+              NowPlayingScreen()
             }
           }
         }
