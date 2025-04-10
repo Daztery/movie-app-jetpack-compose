@@ -14,8 +14,8 @@ interface MovieRepository {
   suspend fun getMoviesFromDatabase(): List<FavoriteMovieEntity>
   
   // Remote
-  suspend fun getMovies(): List<Movie>  // TODO: Add parameter to difference between database and remote
+  suspend fun getMovies(page: Int): List<Movie>
   suspend fun getMovieDetails(movieId: String): MovieDetail
-  suspend fun getNowPlayingMovies(): List<Movie>
+  suspend fun getNowPlayingMovies(page: Int): List<Movie>
   
 }

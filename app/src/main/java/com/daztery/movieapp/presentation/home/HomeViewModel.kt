@@ -22,12 +22,15 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
   private val _homeUIState = MutableStateFlow(CollectUIState<Movie>())
   val homeUIState = _homeUIState.asStateFlow()
+  private var currentPage = 1
   
   init {
     getMovies()
   }
   
   fun getMovies() {
+    if (_homeUIState.value.isLoading) return
+    
     viewModelScope.launch {
       try {
         _homeUIState.update {
@@ -36,14 +39,15 @@ class HomeViewModel @Inject constructor(
           )
         }
         delay(1.seconds)
-        val movies = movieRepository.getMovies()
+        val movies = movieRepository.getMovies(currentPage)
         _homeUIState.update {
           it.copy(
-            data = movies,
+            data = it.data + movies,
             isLoading = false,
             errorEnum = null
           )
         }
+        currentPage++
       } catch (e: Exception) {
         val errorEnum = when {
           e is ConnectException -> ErrorMessage.INTERNET_CONNECTION

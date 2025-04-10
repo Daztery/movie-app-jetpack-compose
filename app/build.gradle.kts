@@ -22,6 +22,8 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+    
+    buildConfigField("String", "MOVIE_API_KEY", "\"${project.findProperty("MOVIE_API_KEY")}\"")
   }
   
   buildTypes {
@@ -39,6 +41,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
   composeOptions {
     kotlinCompilerExtensionVersion = "1.5.1"

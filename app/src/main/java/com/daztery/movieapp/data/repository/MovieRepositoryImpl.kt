@@ -32,16 +32,16 @@ class MovieRepositoryImpl @Inject constructor(
     return emptyList()
   }
   
-  override suspend fun getMovies(): List<Movie> {
-    return movieDBAPI.getMovies().toMovieList()
+  override suspend fun getMovies(page: Int): List<Movie> {
+    return movieDBAPI.getMovies(page = page).toMovieList()
   }
   
   override suspend fun getMovieDetails(movieId: String): MovieDetail {
     return movieDBAPI.getMovieDetails(movieId).toMovieDetail()
   }
   
-  override suspend fun getNowPlayingMovies(): List<Movie> {
-    return movieDBAPI.getNowPlayingMovies().toMovieList()
+  override suspend fun getNowPlayingMovies(page: Int): List<Movie> {
+    return movieDBAPI.getNowPlayingMovies(page = page).toMovieList()
   }
   
 }

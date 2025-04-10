@@ -21,6 +21,7 @@ class NowPlayingViewModel @Inject constructor(
   
   private val _nowPlayingUIState = MutableStateFlow(CollectUIState<Movie>())
   val nowPlayingUIState = _nowPlayingUIState.asStateFlow()
+  var currentPage = 1
   
   init {
     getMovies()
@@ -34,15 +35,16 @@ class NowPlayingViewModel @Inject constructor(
             isLoading = true
           )
         }
-        val movies = movieRepository.getNowPlayingMovies()
+        val movies = movieRepository.getNowPlayingMovies(currentPage)
         _nowPlayingUIState.update {
           it.copy(
             isLoading = false,
-            data = movies
+            data = it.data + movies
           )
         }
-      } catch (e:Exception){
-        val error = when(e){
+        currentPage++
+      } catch (e: Exception) {
+        val error = when (e) {
           is ConnectException -> ErrorMessage.INTERNET_CONNECTION
           else -> ErrorMessage.DEFAULT
         }
