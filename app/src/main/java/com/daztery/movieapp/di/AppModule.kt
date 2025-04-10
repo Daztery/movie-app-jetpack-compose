@@ -5,10 +5,8 @@ import androidx.room.Room
 import com.daztery.movieapp.data.local.FavoriteMovieDao
 import com.daztery.movieapp.data.local.FavoriteMovieDatabase
 import com.daztery.movieapp.data.remote.MovieDBAPI
-import com.daztery.movieapp.data.repository.MovieLocalRepository
-import com.daztery.movieapp.data.repository.MovieRemoteRepository
-import com.daztery.movieapp.domain.repository.IMovieLocalRepository
-import com.daztery.movieapp.domain.repository.IMovieRemoteRepository
+import com.daztery.movieapp.data.repository.MovieRepositoryImpl
+import com.daztery.movieapp.domain.repository.MovieRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
@@ -69,7 +67,8 @@ class AppModule {
 abstract class Binds {
   
   @Binds
-  abstract fun movieRemoteRepository(
-    movieRemoteRepository: MovieRemoteRepository
-  ): IMovieRemoteRepository
+  abstract fun movieRepository(
+    movieRepositoryImpl: MovieRepositoryImpl
+  ): MovieRepository
+  
 }

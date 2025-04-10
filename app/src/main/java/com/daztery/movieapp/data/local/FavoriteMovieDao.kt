@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteMovieDao {
@@ -14,6 +15,6 @@ interface FavoriteMovieDao {
   suspend fun deleteFavoriteMovie(favoriteMovieEntity: FavoriteMovieEntity)
   
   @Query("SELECT * FROM favoritemovieentity")
-  suspend fun getFavoriteMovies(): List<FavoriteMovieEntity>
+  fun getFavoriteMovies(): Flow<List<FavoriteMovieEntity>>
 
 }

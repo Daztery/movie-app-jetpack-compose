@@ -15,10 +15,31 @@ fun FavoriteMovieEntity.toMovie(): Movie {
   )
 }
 
+fun List<FavoriteMovieEntity>.toMovieList(): List<Movie> {
+  return this.map { favoriteMovieEntity ->
+    favoriteMovieEntity.toMovie()
+  }
+}
+
 fun Movie.toFavoriteMovieEntity(): FavoriteMovieEntity {
   return FavoriteMovieEntity(
     movieId = this.id.toString(),
     posterPath = this.imageUrl,
+  )
+}
+
+fun MovieDetail.toMovie(): Movie{
+  return Movie(
+    id = this.id,
+    imageUrl = this.posterPath,
+    title = this.title
+  )
+}
+
+fun MovieDetail.toFavoriteMovieEntity(): FavoriteMovieEntity{
+  return FavoriteMovieEntity(
+    movieId = this.id.toString(),
+    posterPath = this.posterPath,
   )
 }
 

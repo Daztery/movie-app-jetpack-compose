@@ -12,16 +12,18 @@ import com.daztery.movieapp.domain.model.MovieDetail
 
 @Composable
 fun DetailContent(
-  movie: MovieDetail,
+  movieDetail: MovieDetail,
   onBack: () -> Unit,
-  onFavoriteClick: () -> Unit
+  onFavoriteClick: (MovieDetail) -> Unit
 ) {
   Scaffold(
     topBar = {
       DetailTopBar(
-        movie = movie,
+        movieDetail = movieDetail,
         onBack = onBack,
-        onFavoriteClick = onFavoriteClick
+        onFavoriteClick = { movieDetail ->
+          onFavoriteClick(movieDetail)
+        }
       )
     }
   ) { paddingValues ->
@@ -30,9 +32,9 @@ fun DetailContent(
         modifier = Modifier
           .fillMaxWidth()
           .height(400.dp),
-        movieDetail = movie
+        movieDetail = movieDetail
       )
-      DetailBody(movieDetail = movie)
+      DetailBody(movieDetail = movieDetail)
     }
   }
 }

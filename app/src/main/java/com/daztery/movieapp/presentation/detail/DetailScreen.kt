@@ -1,5 +1,6 @@
 package com.daztery.movieapp.presentation.detail
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -24,17 +25,22 @@ fun DetailScreen(
   
   val movieDetailUIState by viewModel.detailUIState.collectAsState()
   
-  
   Box {
+    LaunchedEffect(movieDetailUIState.errorEnum) {
+      if (movieDetailUIState.errorEnum != null) {
+        Log.d("DetailsScreen", "Error: ${movieDetailUIState.errorEnum}")
+      }
+    }
+    
     if (movieDetailUIState.isLoading) {
       CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     } else {
       movieDetailUIState.data?.let {
         DetailContent(
-          movie = it,
+          movieDetail = it,
           onBack = onBack,
-          onFavoriteClick = { /*movie ->
-            viewModel.updateFavorites(movie)*/
+          onFavoriteClick = { movieDetail ->
+            viewModel.updateFavorites(movieDetail)
           }
         )
       }

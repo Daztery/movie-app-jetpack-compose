@@ -8,11 +8,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -73,10 +70,18 @@ class MainActivity : ComponentActivity() {
               )
             }
             composable(Routes.FavoriteScreen) {
-              FavoriteScreen()
+              FavoriteScreen(
+                navigateToDetail = { movie ->
+                  navController.navigate(Routes.DetailScreen + "/${movie.id}")
+                }
+              )
             }
             composable(Routes.NowPlayingScreen) {
-              NowPlayingScreen()
+              NowPlayingScreen(
+                navigateToDetail = { movie ->
+                  navController.navigate(Routes.DetailScreen + "/${movie.id}")
+                }
+              )
             }
           }
         }
