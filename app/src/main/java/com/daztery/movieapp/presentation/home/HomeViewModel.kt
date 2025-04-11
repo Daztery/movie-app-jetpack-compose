@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.daztery.movieapp.common.utils.ErrorMessage
 import com.daztery.movieapp.common.utils.CollectUIState
 import com.daztery.movieapp.domain.model.Movie
-import com.daztery.movieapp.domain.repository.MovieRepository
+import com.daztery.movieapp.domain.usecase.MovieUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-  private val movieRepository: MovieRepository
+  private val movieUseCases: MovieUseCases
 ) : ViewModel() {
   private val _homeUIState = MutableStateFlow(CollectUIState<Movie>())
   val homeUIState = _homeUIState.asStateFlow()
@@ -41,7 +41,7 @@ class HomeViewModel @Inject constructor(
             )
           }
           delay(1.seconds)
-          val movies = movieRepository.getMovies(currentPage)
+          val movies = movieUseCases.getMoviesUseCase(currentPage)
           _homeUIState.update {
             it.copy(
               data = it.data + movies,

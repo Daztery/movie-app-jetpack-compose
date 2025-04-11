@@ -8,6 +8,13 @@ import com.daztery.movieapp.data.local.FavoriteMovieDatabase
 import com.daztery.movieapp.data.remote.MovieDBAPI
 import com.daztery.movieapp.data.repository.MovieRepositoryImpl
 import com.daztery.movieapp.domain.repository.MovieRepository
+import com.daztery.movieapp.domain.usecase.movie.GetMovieDetailsUseCase
+import com.daztery.movieapp.domain.usecase.movie.GetMoviesUseCase
+import com.daztery.movieapp.domain.usecase.movie.GetNowPlayingUseCase
+import com.daztery.movieapp.domain.usecase.MovieUseCases
+import com.daztery.movieapp.domain.usecase.movie.DeleteFavoriteUseCase
+import com.daztery.movieapp.domain.usecase.movie.GetFavoriteMoviesUseCase
+import com.daztery.movieapp.domain.usecase.movie.InsertFavoriteUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
@@ -66,6 +73,21 @@ class AppModule {
   @Provides
   fun providesMovieApi(retrofit: Retrofit): MovieDBAPI {
     return retrofit.create(MovieDBAPI::class.java)
+  }
+  
+  @Singleton
+  @Provides
+  fun providesMovieUseCases(
+    repository: MovieRepository
+  ): MovieUseCases {
+    return MovieUseCases(
+      getMoviesUseCase = GetMoviesUseCase(repository),
+      getMovieDetailsUseCase = GetMovieDetailsUseCase(repository),
+      getNowPlayingUseCase = GetNowPlayingUseCase(repository),
+      insertFavoriteMovieUseCase = InsertFavoriteUseCase(repository),
+      deleteFavoriteMovieUseCase = DeleteFavoriteUseCase(repository),
+      getFavoriteMoviesUseCase = GetFavoriteMoviesUseCase(repository)
+    )
   }
   
 }

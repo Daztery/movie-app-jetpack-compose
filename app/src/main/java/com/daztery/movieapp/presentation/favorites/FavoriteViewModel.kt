@@ -7,7 +7,7 @@ import com.daztery.movieapp.common.utils.ErrorMessage
 import com.daztery.movieapp.data.toFavoriteMovieEntity
 import com.daztery.movieapp.data.toMovie
 import com.daztery.movieapp.domain.model.Movie
-import com.daztery.movieapp.domain.repository.MovieRepository
+import com.daztery.movieapp.domain.usecase.MovieUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-  private val movieRepository: MovieRepository
+  private val movieUseCases: MovieUseCases,
 ) : ViewModel() {
   
   private val _favoriteUIState = MutableStateFlow(CollectUIState<Movie>())
@@ -36,7 +36,7 @@ class FavoriteViewModel @Inject constructor(
             isLoading = true
           )
         }
-        movieRepository.getFavoriteMovies().collect { movieList ->
+        movieUseCases.getFavoriteMoviesUseCase().collect { movieList ->
           _favoriteUIState.update {
             it.copy(
               isLoading = false,
@@ -64,7 +64,7 @@ class FavoriteViewModel @Inject constructor(
   
   fun deleteMovieFromFavorites(movie: Movie){
     viewModelScope.launch {
-      movieRepository.deleteFavoriteMovie(movie.toFavoriteMovieEntity())
+      movieUseCases.deleteFavoriteMovieUseCase(movie.toFavoriteMovieEntity())
     }
   }
   

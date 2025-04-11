@@ -9,6 +9,7 @@ import com.daztery.movieapp.data.toFavoriteMovieEntity
 import com.daztery.movieapp.data.toMovie
 import com.daztery.movieapp.domain.model.MovieDetail
 import com.daztery.movieapp.domain.repository.MovieRepository
+import com.daztery.movieapp.domain.usecase.MovieUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-  private val movieRepository: MovieRepository
+  private val movieUseCases: MovieUseCases,
 ) : ViewModel() {
   
   private val _detailUIState = MutableStateFlow(ObjectUIState<MovieDetail>())
@@ -33,7 +34,7 @@ class DetailViewModel @Inject constructor(
             isLoading = true,
           )
         }
-        val movie = movieRepository.getMovieDetails(movieId)
+        val movie = movieUseCases.getMovieDetailsUseCase(movieId)
         _detailUIState.update {
           it.copy(
             isLoading = false,
@@ -59,16 +60,16 @@ class DetailViewModel @Inject constructor(
   fun updateFavorites(movieDetail: MovieDetail) {
     viewModelScope.launch {
       if (movieDetail.isMovieInFavorites) {
-        movieRepository.deleteFavoriteMovie(movieDetail.toFavoriteMovieEntity())
+        movieUseCases.deleteFavoriteMovieUseCase(movieDetail.toFavoriteMovieEntity())
       } else {
-        movieRepository.insertFavoriteMovie(movieDetail.toFavoriteMovieEntity())
+        movieUseCases.insertFavoriteMovieUseCase(movieDetail.toFavoriteMovieEntity())
       }
     }
   }
   
   private fun getFavoritesMovies() {
     viewModelScope.launch {
-      movieRepository.getFavoriteMovies().collect { movieList ->
+      movieUseCases.getFavoriteMoviesUseCase().collect { movieList ->
         val currentMovieDetail = _detailUIState.value.data
         currentMovieDetail?.let {
           val isMovieInFavorites = movieList.any { movie ->
