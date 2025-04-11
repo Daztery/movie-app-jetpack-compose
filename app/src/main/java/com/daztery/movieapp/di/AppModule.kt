@@ -2,6 +2,7 @@ package com.daztery.movieapp.di
 
 import android.app.Application
 import androidx.room.Room
+import com.daztery.movieapp.BuildConfig
 import com.daztery.movieapp.data.local.FavoriteMovieDao
 import com.daztery.movieapp.data.local.FavoriteMovieDatabase
 import com.daztery.movieapp.data.remote.MovieDBAPI
@@ -14,6 +15,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -47,9 +51,14 @@ class AppModule {
       .add(KotlinJsonAdapterFactory())
       .build()
     
+    val okHttpClient = OkHttpClient.Builder()
+      .addInterceptor(ApiKeyInterceptor(BuildConfig.MOVIE_API_KEY))
+      .build()
+    
     return Retrofit.Builder()
       .baseUrl("https://api.themoviedb.org/")
       .addConverterFactory(MoshiConverterFactory.create(moshi))
+      .client(okHttpClient)
       .build()
   }
   
@@ -71,4 +80,21 @@ abstract class Binds {
     movieRepositoryImpl: MovieRepositoryImpl
   ): MovieRepository
   
+}
+
+class ApiKeyInterceptor(private val apiKey: String) : Interceptor {
+  override fun intercept(chain: Interceptor.Chain): Response {
+    val original = chain.request()
+    val originalUrl = original.url
+    
+    val newUrl = originalUrl.newBuilder()
+      .addQueryParameter("api_key", apiKey)
+      .build()
+    
+    val newRequest = original.newBuilder()
+      .url(newUrl)
+      .build()
+    
+    return chain.proceed(newRequest)
+  }
 }
