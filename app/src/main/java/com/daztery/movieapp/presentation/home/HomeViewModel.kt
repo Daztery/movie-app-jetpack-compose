@@ -23,6 +23,7 @@ class HomeViewModel @Inject constructor(
   private val _homeUIState = MutableStateFlow(CollectUIState<Movie>())
   val homeUIState = _homeUIState.asStateFlow()
   private var currentPage = 1
+  private var totalPages = 4
   
   init {
     getMovies()
@@ -33,21 +34,23 @@ class HomeViewModel @Inject constructor(
     
     viewModelScope.launch {
       try {
-        _homeUIState.update {
-          it.copy(
-            isLoading = true
-          )
+        if (currentPage < totalPages) {
+          _homeUIState.update {
+            it.copy(
+              isLoading = true
+            )
+          }
+          delay(1.seconds)
+          val movies = movieRepository.getMovies(currentPage)
+          _homeUIState.update {
+            it.copy(
+              data = it.data + movies,
+              isLoading = false,
+              errorEnum = null
+            )
+          }
+          currentPage++
         }
-        delay(1.seconds)
-        val movies = movieRepository.getMovies(currentPage)
-        _homeUIState.update {
-          it.copy(
-            data = it.data + movies,
-            isLoading = false,
-            errorEnum = null
-          )
-        }
-        currentPage++
       } catch (e: Exception) {
         val errorEnum = when {
           e is ConnectException -> ErrorMessage.INTERNET_CONNECTION
