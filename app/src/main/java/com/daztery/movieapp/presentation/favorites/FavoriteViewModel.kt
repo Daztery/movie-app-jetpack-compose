@@ -28,7 +28,7 @@ class FavoriteViewModel @Inject constructor(
     getMovies()
   }
   
-  fun getMovies() {
+  private fun getMovies() {
     viewModelScope.launch {
       try {
         _favoriteUIState.update {
